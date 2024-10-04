@@ -76,4 +76,6 @@ dependencies {
 
     // Timber
     implementation "com.jakewharton.timber:timber:$version_timber"
+
+    implementation 'com.google.android.material:material:1.12.0'
 }
