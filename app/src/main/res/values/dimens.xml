@@ -2,4 +2,6 @@
 <resources>
     <dimen name="default_padding">8dp</dimen>
     <dimen name="medium_padding">16dp</dimen>
+
+    <dimen name="election_header_text_size">20sp</dimen>
 </resources>

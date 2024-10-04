@@ -41,7 +41,6 @@ class ElectionsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // Inflate the layout using View Binding
         _binding = FragmentElectionBinding.inflate(inflater, container, false)
 
         // TODO: Add ViewModel values and create ViewModel
