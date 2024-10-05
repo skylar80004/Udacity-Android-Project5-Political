@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.android.politicalpreparedness.data.ElectionDataSource
 import com.example.android.politicalpreparedness.data.VoterInfoDataSource
+import com.example.android.politicalpreparedness.database.ElectionDao
 import com.example.android.politicalpreparedness.network.DataResult
 import com.example.android.politicalpreparedness.network.models.Division
 import com.example.android.politicalpreparedness.network.models.Election
@@ -13,15 +14,15 @@ import kotlinx.coroutines.launch
 import java.util.Date
 
 class ElectionsViewModel(
-    private val electionsDataSource: ElectionDataSource
+    private val electionsDataSource: ElectionDataSource,
+    private val electionDao: ElectionDao
 ) : ViewModel() {
     // TODO: Create live data val for upcoming elections
     private val _upcomingElections = MutableLiveData<List<Election>>()
     val upcomingElections: LiveData<List<Election>> = _upcomingElections
 
     // TODO: Create live data val for saved elections
-    private val _savedElections = MutableLiveData<List<Election>>()
-    val savedElections: LiveData<List<Election>> = _savedElections
+    val savedElections: LiveData<List<Election>> = electionDao.getAllElections()
 
     private val _showError = MutableLiveData<String>()
     val showError: LiveData<String> = _showError
@@ -29,11 +30,7 @@ class ElectionsViewModel(
     private val _showLoading = MutableLiveData<Boolean>()
     val showLoading: LiveData<Boolean> = _showLoading
 
-    init {
-        loadUpcomingElections()
-    }
-
-    private fun loadUpcomingElections() {
+    fun loadUpcomingElections() {
         viewModelScope.launch {
             showLoading()
             when (val electionsResult = electionsDataSource.getElections()) {
@@ -102,7 +99,6 @@ class ElectionsViewModel(
         )
 
         _upcomingElections.value = elections
-        _savedElections.value = elections
     }
     // TODO: Create functions to navigate to saved or upcoming election voter info
 }

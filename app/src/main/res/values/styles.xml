@@ -14,4 +14,12 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="HyperlinkText">
+        <item name="android:textColor">#0000FF</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:selectAllOnFocus">false</item>
+        <item name="android:linksClickable">false</item>
+        <item name="android:autoLink">all</item>
+    </style>
+
 </resources>

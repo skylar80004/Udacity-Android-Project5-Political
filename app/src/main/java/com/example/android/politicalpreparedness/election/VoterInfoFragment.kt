@@ -1,11 +1,15 @@
 package com.example.android.politicalpreparedness.election
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.example.android.politicalpreparedness.R
 import com.example.android.politicalpreparedness.data.VoterInfoNetworkRepository
 import com.example.android.politicalpreparedness.database.ElectionDatabase
 import com.example.android.politicalpreparedness.databinding.FragmentVoterInfoBinding
@@ -28,18 +32,16 @@ class VoterInfoFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val viewModelFactory = VoterInfoViewModelFactory(
-            ElectionDatabase.getInstance(requireContext()).electionDao,
             VoterInfoNetworkRepository(
                 CivicsApi.retrofitService
-            )
+            ),
+            ElectionDatabase.getInstance(requireContext()).electionDao
         )
         viewModel = ViewModelProvider(this, viewModelFactory)[VoterInfoViewModel::class.java]
 
         _binding = FragmentVoterInfoBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
         binding.viewModel = viewModel
-
-
 
 
         // TODO: Add ViewModel values and create ViewModel
@@ -70,7 +72,6 @@ class VoterInfoFragment : Fragment() {
         electionId = arguments?.getInt("arg_election_id") ?: -1
         division = arguments?.getParcelable<Division>("arg_division")
 
-        viewModel.fetchVoterInfo(electionId = electionId)
 
         viewModel.showLoading.observe(viewLifecycleOwner) { showLoading ->
             if (showLoading) {
@@ -83,15 +84,44 @@ class VoterInfoFragment : Fragment() {
         viewModel.showErrorMessage.observe(viewLifecycleOwner) { message ->
             showToast(message = message)
         }
+
+        viewModel.ballotInfoUrl.observe(viewLifecycleOwner) { url ->
+            binding.stateBallot.setOnClickListener {
+                loadUrl(url = url)
+            }
+        }
+
+        viewModel.pollingLocationsURL.observe(viewLifecycleOwner) { url ->
+            binding.stateLocations.setOnClickListener {
+                loadUrl(url = url)
+            }
+        }
+
+        viewModel.electionButtonState.observe(viewLifecycleOwner) { state ->
+            binding.btnFollowElection.text = when (state) {
+                FollowState.FOLLOWING -> getString(R.string.unfollow_election)
+                FollowState.NOT_FOLLOWING -> getString(R.string.follow_election)
+                else -> ""
+            }
+            binding.btnFollowElection.setOnClickListener {
+                viewModel.onClickElectionButton()
+            }
+        }
+
+        viewModel.loadData(electionIdValue = electionId)
     }
 
-    // TODO: Create method to load URL intents
     private fun loadUrl(url: String) {
-        // Logic to load the URL, e.g., using an Intent
+        val intent = Intent(Intent.ACTION_VIEW).apply {
+            data = Uri.parse(url)
+        }
+        startActivity(intent)
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null // Clear binding reference to avoid memory leaks
     }
+
+
 }

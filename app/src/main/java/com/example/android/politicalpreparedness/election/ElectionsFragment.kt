@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.android.politicalpreparedness.data.ElectionsNetworkRepository
+import com.example.android.politicalpreparedness.database.ElectionDatabase
 import com.example.android.politicalpreparedness.databinding.FragmentElectionBinding
 import com.example.android.politicalpreparedness.election.adapter.ElectionListAdapter
 import com.example.android.politicalpreparedness.election.adapter.ElectionListener
@@ -35,13 +36,18 @@ class ElectionsFragment : Fragment() {
 
     private val savedElectionsAdapter = ElectionListAdapter(
         ElectionListener(
-            clickListener = { electionId ->
-                showToast("Saved Election clicked! Id: ${electionId.id}")
+            clickListener = { election ->
+                showToast("Upcoming Election clicked! Id: ${election.id}")
+
+                val action = ElectionsFragmentDirections.actionElectionsFragmentToVoterInfoFragment(
+                    election.id,
+                    election.division
+                )
+                findNavController().navigate(action)
             }
         )
     )
 
-    private val viewModelFactory = ElectionsViewModelFactory(ElectionsNetworkRepository( CivicsApi.retrofitService))
     private lateinit var viewModel: ElectionsViewModel
 
     override fun onCreateView(
@@ -50,24 +56,6 @@ class ElectionsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentElectionBinding.inflate(inflater, container, false)
-        viewModel = ViewModelProvider(this, viewModelFactory)[ElectionsViewModel::class.java]
-
-        // TODO: Add ViewModel values and create ViewModel
-        viewModel.upcomingElections.observe(viewLifecycleOwner) { elections ->
-            upcomingElectionsAdapter.submitList(elections)
-        }
-
-        viewModel.savedElections.observe(viewLifecycleOwner) { savedElections ->
-            savedElectionsAdapter.submitList(savedElections)
-        }
-
-        viewModel.showLoading.observe(viewLifecycleOwner) { showLoading ->
-            if (showLoading) {
-                binding.generalLoading.visibility = View.VISIBLE
-            } else {
-                binding.generalLoading.visibility = View.GONE
-            }
-        }
 
         // Set up RecyclerView for upcoming elections
         binding.recyclerUpcomingElections.apply {
@@ -85,16 +73,40 @@ class ElectionsFragment : Fragment() {
             }
         }
 
+
+        val viewModelFactory = ElectionsViewModelFactory(
+            ElectionsNetworkRepository(CivicsApi.retrofitService),
+            ElectionDatabase.getInstance(requireContext()).electionDao
+        )
+        viewModel = ViewModelProvider(this, viewModelFactory)[ElectionsViewModel::class.java]
+
+        viewModel.upcomingElections.observe(viewLifecycleOwner) { elections ->
+            upcomingElectionsAdapter.submitList(elections)
+        }
+
+        viewModel.savedElections.observe(viewLifecycleOwner) { savedElections ->
+            savedElectionsAdapter.submitList(savedElections)
+        }
+
+        viewModel.showLoading.observe(viewLifecycleOwner) { showLoading ->
+            if (showLoading) {
+                binding.generalLoading.visibility = View.VISIBLE
+            } else {
+                binding.generalLoading.visibility = View.GONE
+            }
+        }
+
+
+
         // TODO: Link elections to voter info
         // Add code to link elections to voter info if necessary
 
-        // TODO: Initiate recycler adapters
-        // Initialize your RecyclerView adapters here
-
-        // TODO: Populate recycler adapters
-        // Load data into your adapters here
-
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewModel.loadUpcomingElections()
     }
 
     override fun onDestroyView() {

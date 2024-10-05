@@ -5,6 +5,14 @@
     <string name="representatives">Representatives</string>
     <string name="saved_elections">Saved Elections</string>
 
+    <string name="correspondence_address">Correspondence Address</string>
+    <string name="state_information">State Information</string>
+    <string name="polling_locations"><u>Polling Locations</u></string>
+    <string name="ballot_information"><u>Ballot Information</u></string>
+
+    <string name="follow_election"><u>Follow election</u></string>
+    <string name="unfollow_election"><u>Unfollow election</u></string>
+
     <!-- TODO: Add necessary string values -->
 
 </resources>
