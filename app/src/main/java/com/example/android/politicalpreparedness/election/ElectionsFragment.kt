@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.android.politicalpreparedness.data.ElectionsNetworkRepository
 import com.example.android.politicalpreparedness.databinding.FragmentElectionBinding
@@ -20,8 +21,14 @@ class ElectionsFragment : Fragment() {
 
     private val upcomingElectionsAdapter = ElectionListAdapter(
         ElectionListener(
-            clickListener = { electionId ->
-                showToast("Upcoming Election clicked! Id: $electionId")
+            clickListener = { election ->
+                showToast("Upcoming Election clicked! Id: ${election.id}")
+
+                val action = ElectionsFragmentDirections.actionElectionsFragmentToVoterInfoFragment(
+                    election.id,
+                    election.division
+                )
+                findNavController().navigate(action)
             }
         )
     )
@@ -29,7 +36,7 @@ class ElectionsFragment : Fragment() {
     private val savedElectionsAdapter = ElectionListAdapter(
         ElectionListener(
             clickListener = { electionId ->
-                showToast("Saved Election clicked! Id: $electionId")
+                showToast("Saved Election clicked! Id: ${electionId.id}")
             }
         )
     )
@@ -56,9 +63,9 @@ class ElectionsFragment : Fragment() {
 
         viewModel.showLoading.observe(viewLifecycleOwner) { showLoading ->
             if (showLoading) {
-                binding.upcomingElectionsLoadingSpinner.visibility = View.VISIBLE
+                binding.generalLoading.visibility = View.VISIBLE
             } else {
-                binding.upcomingElectionsLoadingSpinner.visibility = View.GONE
+                binding.generalLoading.visibility = View.GONE
             }
         }
 

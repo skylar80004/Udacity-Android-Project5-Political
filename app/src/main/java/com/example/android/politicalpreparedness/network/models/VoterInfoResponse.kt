@@ -8,5 +8,5 @@ class VoterInfoResponse (
     val pollingLocations: String? = null, //TODO: Future Use
     val contests: String? = null, //TODO: Future Use
     val state: List<State>? = null,
-    val electionElectionOfficials: List<ElectionOfficial>? = null
+    val electionElectionOfficials: List<ElectionOfficial>? = null,
 )

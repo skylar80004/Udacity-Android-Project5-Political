@@ -5,13 +5,16 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.android.politicalpreparedness.data.ElectionDataSource
+import com.example.android.politicalpreparedness.data.VoterInfoDataSource
 import com.example.android.politicalpreparedness.network.DataResult
 import com.example.android.politicalpreparedness.network.models.Division
 import com.example.android.politicalpreparedness.network.models.Election
 import kotlinx.coroutines.launch
 import java.util.Date
 
-class ElectionsViewModel(private val electionsDataSource: ElectionDataSource) : ViewModel() {
+class ElectionsViewModel(
+    private val electionsDataSource: ElectionDataSource
+) : ViewModel() {
     // TODO: Create live data val for upcoming elections
     private val _upcomingElections = MutableLiveData<List<Election>>()
     val upcomingElections: LiveData<List<Election>> = _upcomingElections
@@ -32,9 +35,8 @@ class ElectionsViewModel(private val electionsDataSource: ElectionDataSource) : 
 
     private fun loadUpcomingElections() {
         viewModelScope.launch {
-            _showLoading.postValue(true)
+            showLoading()
             when (val electionsResult = electionsDataSource.getElections()) {
-
                 is DataResult.Success -> {
                     println("prueba, success: $${electionsResult.data.elections}")
                     _upcomingElections.postValue(electionsResult.data.elections)
@@ -47,9 +49,18 @@ class ElectionsViewModel(private val electionsDataSource: ElectionDataSource) : 
 
                 }
             }
-            _showLoading.postValue(false)
+            hideLoading()
         }
     }
+
+    private fun showLoading() {
+        _showLoading.postValue(true)
+    }
+    private fun hideLoading() {
+        _showLoading.postValue(false)
+    }
+
+
 
     private fun loadUpcomingElectionsDebug() {
         // Hardcoded list of 5 election instances
