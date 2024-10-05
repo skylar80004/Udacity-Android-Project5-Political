@@ -4,13 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.android.politicalpreparedness.data.ElectionsNetworkRepository
 import com.example.android.politicalpreparedness.databinding.FragmentElectionBinding
 import com.example.android.politicalpreparedness.election.adapter.ElectionListAdapter
 import com.example.android.politicalpreparedness.election.adapter.ElectionListener
+import com.example.android.politicalpreparedness.network.CivicsApi
 import com.example.android.politicalpreparedness.util.showToast
 
 class ElectionsFragment : Fragment() {
@@ -33,8 +34,8 @@ class ElectionsFragment : Fragment() {
         )
     )
 
-    // TODO: Declare ViewModel
-    private val viewModel: ElectionsViewModel by viewModels()
+    private val viewModelFactory = ElectionsViewModelFactory(ElectionsNetworkRepository( CivicsApi.retrofitService))
+    private lateinit var viewModel: ElectionsViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -42,6 +43,7 @@ class ElectionsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentElectionBinding.inflate(inflater, container, false)
+        viewModel = ViewModelProvider(this, viewModelFactory)[ElectionsViewModel::class.java]
 
         // TODO: Add ViewModel values and create ViewModel
         viewModel.upcomingElections.observe(viewLifecycleOwner) { elections ->
@@ -50,6 +52,14 @@ class ElectionsFragment : Fragment() {
 
         viewModel.savedElections.observe(viewLifecycleOwner) { savedElections ->
             savedElectionsAdapter.submitList(savedElections)
+        }
+
+        viewModel.showLoading.observe(viewLifecycleOwner) { showLoading ->
+            if (showLoading) {
+                binding.upcomingElectionsLoadingSpinner.visibility = View.VISIBLE
+            } else {
+                binding.upcomingElectionsLoadingSpinner.visibility = View.GONE
+            }
         }
 
         // Set up RecyclerView for upcoming elections

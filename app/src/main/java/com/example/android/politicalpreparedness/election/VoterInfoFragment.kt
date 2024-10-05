@@ -5,8 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 
 class VoterInfoFragment : Fragment() {
+
+
+
+    private val viewModel: VoterInfoViewModel by viewModels()
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -29,6 +35,11 @@ class VoterInfoFragment : Fragment() {
         // TODO: Handle save button UI state
         // TODO: cont'd Handle save button clicks
         return null
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
     }
 
     // TODO: Create method to load URL intents
