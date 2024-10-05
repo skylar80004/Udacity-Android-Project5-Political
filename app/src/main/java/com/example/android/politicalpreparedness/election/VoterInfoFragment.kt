@@ -51,9 +51,6 @@ class VoterInfoFragment : Fragment() {
         // TODO: Populate voter info -- hide views without provided data.
         // Implement logic to check if data is available and hide/show views accordingly
 
-        // TODO: Handle loading of URLs
-        // Set up click listeners for any URL buttons here
-
         // TODO: Handle save button UI state
         // Set the initial state of the save button based on ViewModel state
 
@@ -61,6 +58,10 @@ class VoterInfoFragment : Fragment() {
 //        binding.buttonSave.setOnClickListener {
 //            // Logic to save the information
 //        }
+
+        binding.btnFollowElection.setOnClickListener {
+            viewModel.onClickElectionButton()
+        }
 
         return binding.root
     }
@@ -86,15 +87,23 @@ class VoterInfoFragment : Fragment() {
         }
 
         viewModel.ballotInfoUrl.observe(viewLifecycleOwner) { url ->
-            binding.stateBallot.setOnClickListener {
-                loadUrl(url = url)
+            binding.stateBallot.apply {
+                setOnClickListener {
+                    loadUrl(url = url)
+                }
+                visibility = View.VISIBLE
             }
+            binding.stateHeader.visibility = View.VISIBLE
         }
 
         viewModel.pollingLocationsURL.observe(viewLifecycleOwner) { url ->
-            binding.stateLocations.setOnClickListener {
-                loadUrl(url = url)
+            binding.stateLocations.apply {
+                setOnClickListener {
+                    loadUrl(url = url)
+                }
+                visibility = View.VISIBLE
             }
+            binding.stateHeader.visibility = View.VISIBLE
         }
 
         viewModel.electionButtonState.observe(viewLifecycleOwner) { state ->
@@ -103,8 +112,19 @@ class VoterInfoFragment : Fragment() {
                 FollowState.NOT_FOLLOWING -> getString(R.string.follow_election)
                 else -> ""
             }
-            binding.btnFollowElection.setOnClickListener {
-                viewModel.onClickElectionButton()
+        }
+
+        viewModel.correspondenceAddress.observe(viewLifecycleOwner) { correspondenceAddress ->
+            binding.apply {
+                addressGroup.visibility = View.VISIBLE
+                address.text = correspondenceAddress
+            }
+        }
+
+        viewModel.electionDay.observe(viewLifecycleOwner) { electionDay ->
+            binding.electionDate.apply {
+                text = electionDay
+                visibility = View.VISIBLE
             }
         }
 

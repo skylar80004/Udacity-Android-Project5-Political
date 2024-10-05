@@ -21,6 +21,10 @@ class VoterInfoViewModel(
     private val _election = MutableLiveData<Election>()
     val election: LiveData<Election> = _election
 
+    val electionDay: LiveData<String> = election.map {
+        it.electionDay.toString()
+    }
+
 //    private val _voterInfo = MutableLiveData<VoterInfoResponse>()
 //    val voterInfo: LiveData<VoterInfoResponse> = _voterInfo
 

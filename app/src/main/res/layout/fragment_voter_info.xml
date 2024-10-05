@@ -12,6 +12,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:animateLayoutChanges="true"
         tools:context="com.example.android.politicalpreparedness.MainActivity">
 
         <com.google.android.material.progressindicator.CircularProgressIndicator
@@ -41,6 +42,7 @@
             android:layout_marginStart="@dimen/medium_padding"
             android:layout_marginEnd="@dimen/medium_padding"
             android:text="@{viewModel.election.name}"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/election_name"
@@ -55,6 +57,7 @@
             android:text="@string/state_information"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
+            android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/election_date"
             tools:text="State Information" />
@@ -66,6 +69,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/medium_padding"
             android:text="@string/polling_locations"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -82,6 +86,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
+            android:visibility="gone"
             app:layout_constraintTop_toBottomOf="@id/state_locations"
             tools:text="Ballot Information" />
 
@@ -89,6 +94,7 @@
             android:id="@+id/address_group"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             app:constraint_referenced_ids="state_correspondence_header,address" />
 
         <TextView
@@ -100,6 +106,7 @@
             android:layout_marginTop="@dimen/medium_padding"
             android:layout_marginEnd="@dimen/medium_padding"
             android:text="@string/correspondence_address"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -112,8 +119,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/medium_padding"
             android:layout_marginEnd="@dimen/medium_padding"
-            android:text="@{viewModel.correspondenceAddress}"
             app:layout_constraintEnd_toEndOf="parent"
+            android:visibility="gone"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/state_correspondence_header"
