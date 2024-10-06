@@ -14,6 +14,15 @@ class RepresentativeViewModel(
     private val representativeDataSource: RepresentativeDataSource
 ) : BaseViewModel() {
 
+    val addressLine1 = MutableLiveData<String>()
+    val addressLine2 = MutableLiveData<String>()
+    val city = MutableLiveData<String>()
+    val state = MutableLiveData<String>()
+    val zip = MutableLiveData<String>()
+
+
+
+
     //TODO: Establish live data for representatives and address
 
     //TODO: Create function to fetch representatives from API from a provided address
@@ -36,6 +45,9 @@ class RepresentativeViewModel(
     private val _representatives = MutableLiveData<List<Representative>>()
     val representatives: LiveData<List<Representative>> = _representatives
 
+    fun setSelectedState(value: String) {
+        state.postValue(value)
+    }
     fun fetchRepresentatives() {
         viewModelScope.launch {
 

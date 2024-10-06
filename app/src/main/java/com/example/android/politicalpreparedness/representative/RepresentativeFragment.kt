@@ -8,25 +8,29 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.android.politicalpreparedness.R
 import com.example.android.politicalpreparedness.data.RepresentativeNetworkRepository
 import com.example.android.politicalpreparedness.databinding.FragmentRepresentativeBinding
 import com.example.android.politicalpreparedness.network.CivicsApi
 import com.example.android.politicalpreparedness.network.models.Address
 import com.example.android.politicalpreparedness.representative.adapter.RepresentativeListAdapter
+import com.example.android.politicalpreparedness.util.showToast
 import java.util.Locale
 
 class RepresentativeFragment : Fragment() {
+    companion object {
+        //TODO: Add Constant for Location request
+    }
+
     private var _binding: FragmentRepresentativeBinding? = null
     private val binding get() = _binding!!
 
     private val representativesAdapter = RepresentativeListAdapter()
-
-    companion object {
-        //TODO: Add Constant for Location request
-    }
 
     private lateinit var viewModel: RepresentativeViewModel
     private val viewModelFactory = RepresentativeViewModelFactory(
@@ -40,7 +44,7 @@ class RepresentativeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        viewModel = ViewModelProvider(this,viewModelFactory)[RepresentativeViewModel::class.java]
+        viewModel = ViewModelProvider(this, viewModelFactory)[RepresentativeViewModel::class.java]
         _binding = FragmentRepresentativeBinding.inflate(inflater, container, false)
 
         binding.apply {
@@ -50,6 +54,30 @@ class RepresentativeFragment : Fragment() {
                     orientation = LinearLayoutManager.VERTICAL
                 }
             }
+            
+            val statesArray = resources.getStringArray(R.array.states)
+
+            val adapter =
+                ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, statesArray)
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            binding.state.adapter = adapter
+
+
+            state.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>,
+                    view: View?,
+                    pos: Int,
+                    id: Long
+                ) {
+                    viewModel.setSelectedState(statesArray[pos])
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>) {
+                    // Another interface callback.
+                }
+            }
+
         }
         return binding.root
 
@@ -69,10 +97,8 @@ class RepresentativeFragment : Fragment() {
             representativesAdapter.submitList(representatives)
         }
 
-        binding.apply {
-            buttonSearch.setOnClickListener {
-                viewModel.fetchRepresentatives()
-            }
+        binding.buttonSearch.setOnClickListener {
+            viewModel.fetchRepresentatives()
         }
     }
 
