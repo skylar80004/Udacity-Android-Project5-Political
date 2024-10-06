@@ -15,6 +15,12 @@
     <string name="use_my_location">Use my location</string>
     <string name="find_my_representatives">Find my representatives</string>
 
+    <string name="location_required_error">Location permissions is required to use this feature</string>
+    <string name="enable_location_error">Please enable location to use this feature</string>
+    <string name="location_error">Error getting location: %1$s</string>
+
+
+
 
 
 </resources>
