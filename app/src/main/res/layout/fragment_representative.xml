@@ -16,6 +16,19 @@
         android:layout_height="match_parent"
         app:layoutDescription="@xml/fragment_representative_scene">
 
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/representative_loading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:elevation="100dp"
+            android:visibility="invisible"
+            app:layout_constraintTop_toTopOf="@id/recyclerRepresentatives"
+            app:layout_constraintBottom_toBottomOf="@id/recyclerRepresentatives"
+            app:layout_constraintStart_toStartOf="@id/recyclerRepresentatives"
+            app:layout_constraintEnd_toEndOf="@id/recyclerRepresentatives"/>
+
+
         <!-- TODO: Add visual styling and content -->
         <TextView
             android:id="@+id/search_title"
@@ -119,16 +132,7 @@
             android:text="@string/use_my_location"
             app:layout_constraintTop_toBottomOf="@id/button_search" />
 
-        <com.google.android.material.progressindicator.CircularProgressIndicator
-            android:id="@+id/representative_loading"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:indeterminate="true"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+
 
         <!-- TODO: Add visual styling and content -->
         <TextView
@@ -138,16 +142,17 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/medium_padding"
             android:layout_marginTop="@dimen/medium_padding"
+            android:text="@string/representatives"
             android:layout_marginEnd="@dimen/medium_padding"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/button_location" />
 
-        <!-- TODO: Add Representatives RecyclerView -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerRepresentatives"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_margin="@dimen/medium_padding"
+            android:layout_marginStart="@dimen/medium_padding"
+            android:layout_marginEnd="@dimen/medium_padding"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -166,5 +171,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/representative_title"
             motion:visibilityMode="ignore" />
+
+
     </androidx.constraintlayout.motion.widget.MotionLayout>
 </layout>

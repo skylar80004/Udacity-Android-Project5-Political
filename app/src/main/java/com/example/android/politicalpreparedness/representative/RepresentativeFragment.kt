@@ -85,6 +85,10 @@ class RepresentativeFragment : Fragment() {
         viewModel = ViewModelProvider(this, viewModelFactory)[RepresentativeViewModel::class.java]
         _binding = FragmentRepresentativeBinding.inflate(inflater, container, false)
 
+
+        binding.representativeViewModel = viewModel
+        binding.lifecycleOwner = viewLifecycleOwner
+
         binding.apply {
             recyclerRepresentatives.apply {
                 adapter = representativesAdapter
@@ -217,6 +221,8 @@ class RepresentativeFragment : Fragment() {
                 Manifest.permission.ACCESS_COARSE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED
         ) {
+            binding.representativeLoading.visibility = View.VISIBLE
+
             fusedLocationClient.lastLocation
                 .addOnSuccessListener { location ->
                     if (location != null) {
@@ -229,6 +235,7 @@ class RepresentativeFragment : Fragment() {
                     showToast(message = getString(R.string.location_error, exception.message))
                     // Handle the failure to get location
                     exception.printStackTrace()
+                    binding.representativeLoading.visibility = View.GONE
                 }
             return
         }
