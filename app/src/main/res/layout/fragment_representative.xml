@@ -6,7 +6,7 @@
     <data>
         <!-- ViewModel variable -->
         <variable
-            name="viewModel"
+            name="representativeViewModel"
             type="com.example.android.politicalpreparedness.representative.RepresentativeViewModel" />
     </data>
 
@@ -38,7 +38,7 @@
             android:inputType="textPostalAddress"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/search_title"
-            android:text="@={viewModel.addressLine1}" />
+            android:text="@={representativeViewModel.addressLine1}" />
 
         <!-- TODO: Add data binding value -->
         <!-- TODO: Add visual styling and content -->
@@ -52,7 +52,7 @@
             android:inputType="textPostalAddress"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/address_line_1"
-            android:text="@={viewModel.addressLine2}" />
+            android:text="@={representativeViewModel.addressLine2}" />
 
         <!-- TODO: Add data binding value -->
         <!-- TODO: Add visual styling and content -->
@@ -67,7 +67,7 @@
             app:layout_constraintEnd_toStartOf="@id/state"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/address_line_2"
-            android:text="@={viewModel.city}" />
+            android:text="@={representativeViewModel.city}" />
 
         <!-- TODO: Add data binding value -->
         <!-- TODO: Add visual styling and content -->
@@ -98,7 +98,7 @@
             app:layout_constraintEnd_toEndOf="@id/city"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/city"
-            android:text="@={viewModel.zip}" />
+            android:text="@={representativeViewModel.zip}" />
 
         <Button
             android:id="@+id/button_search"

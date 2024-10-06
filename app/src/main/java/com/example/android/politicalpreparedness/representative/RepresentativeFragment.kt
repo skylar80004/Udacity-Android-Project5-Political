@@ -54,14 +54,14 @@ class RepresentativeFragment : Fragment() {
                     orientation = LinearLayoutManager.VERTICAL
                 }
             }
-            
+
             val statesArray = resources.getStringArray(R.array.states)
 
             val adapter =
                 ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, statesArray)
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            binding.state.adapter = adapter
 
+            state.adapter = adapter
 
             state.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(
@@ -74,18 +74,11 @@ class RepresentativeFragment : Fragment() {
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>) {
-                    // Another interface callback.
                 }
             }
-
         }
         return binding.root
 
-        //TODO: Establish bindings
-
-        //TODO: Define and assign Representative adapter
-
-        //TODO: Populate Representative adapter
 
         //TODO: Establish button listeners for field and location search
 

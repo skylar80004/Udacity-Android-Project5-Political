@@ -48,10 +48,23 @@ class RepresentativeViewModel(
     fun setSelectedState(value: String) {
         state.postValue(value)
     }
+
+    fun getFormattedAddress(): String {
+        // Get values from LiveData and use default empty strings if null
+        val line1 = addressLine1.value?.takeIf { it.isNotEmpty() } ?: ""
+        val line2 = addressLine2.value?.takeIf { it.isNotEmpty() }?.let { " $it" } ?: ""
+        val cityValue = city.value?.takeIf { it.isNotEmpty() } ?: ""
+        val stateValue = state.value?.takeIf { it.isNotEmpty() } ?: ""
+
+        // Construct the formatted address in a single line
+        return "$line1$line2, $cityValue $stateValue".trim().replace(", ,", ",").replace(" ,", ",").replace(" ,", "").replace(", ", " ")
+    }
+
     fun fetchRepresentatives() {
         viewModelScope.launch {
-
-            val address = "340 Main St. Venice CA" // TODO fetch from location
+            //val address = "340 Main St. Venice CA" // TODO fetch from location
+            
+            val address = getFormattedAddress()
             val representativeResult =
                 representativeDataSource.getRepresentativesByAddress(address = address)
 
@@ -70,8 +83,6 @@ class RepresentativeViewModel(
                     showErrorMessage(representativeResult.exception.message ?: "Unknown error")
                 }
             }
-
-
         }
     }
 }
