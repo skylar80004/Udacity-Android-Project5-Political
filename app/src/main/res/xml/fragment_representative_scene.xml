@@ -3,14 +3,51 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <ConstraintSet android:id="@+id/start">
-        <Constraint android:id="@+id/search_title" />
+        <Constraint
+            android:id="@+id/representative_list_container"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/representative_address_form_container" />
+
+        <Constraint
+            android:id="@+id/representative_address_form_container"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
     </ConstraintSet>
 
     <ConstraintSet android:id="@+id/end">
-        <Constraint android:id="@id/search_title" />
+        <Constraint
+            android:id="@+id/representative_address_form_container"
+            app:layout_constraintBottom_toTopOf="parent"
+            android:layout_height="0dp"
+            android:layout_width="match_parent"
+            />
+
     </ConstraintSet>
 
     <Transition
+        android:id="@+id/swipe_up"
         app:constraintSetEnd="@id/end"
-        app:constraintSetStart="@+id/start" />
+        app:constraintSetStart="@id/start"
+        app:duration="600">
+        <OnSwipe
+            app:dragDirection="dragUp"
+            app:touchAnchorId="@id/representative_address_form_container"
+            app:touchRegionId="@id/representative_address_form_container" />
+    </Transition>
+
+    <Transition
+        android:id="@+id/swipe_down"
+        app:constraintSetEnd="@id/start"
+        app:constraintSetStart="@id/end"
+        app:duration="600">
+        <OnSwipe
+            app:dragDirection="dragDown"
+            app:touchAnchorId="@id/representative_list_container"
+            app:touchRegionId="@id/representative_list_container" />
+    </Transition>
 </MotionScene>
