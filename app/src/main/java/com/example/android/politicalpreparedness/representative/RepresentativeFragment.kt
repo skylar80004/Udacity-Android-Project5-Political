@@ -38,7 +38,8 @@ import java.util.Locale
 
 class RepresentativeFragment : Fragment() {
     companion object {
-        private const val MOTION_LAYOUT_STATE = "motion_layout_state"
+        private const val MOTION_LAYOUT_STATE = "motionLayoutState"
+        private const val REPRESENTATIVE_SCROLL_POSITION = "representativesScrollPosition"
     }
 
     private var _binding: FragmentRepresentativeBinding? = null
@@ -93,6 +94,13 @@ class RepresentativeFragment : Fragment() {
 
         binding.representativeViewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
+        binding.executePendingBindings()
+
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         binding.apply {
             recyclerRepresentatives.apply {
@@ -123,11 +131,7 @@ class RepresentativeFragment : Fragment() {
                 override fun onNothingSelected(parent: AdapterView<*>) = Unit
             }
         }
-        return binding.root
-    }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
         viewModel.representatives.observe(viewLifecycleOwner) { representatives ->
             representativesAdapter.submitList(representatives)
         }
@@ -148,11 +152,16 @@ class RepresentativeFragment : Fragment() {
             checkLocationPermission()
         }
 
-        savedInstanceState?.let {
-            val savedState = it.getInt(MOTION_LAYOUT_STATE)
+        savedInstanceState?.let { bundle ->
+            val state = bundle.getInt(MOTION_LAYOUT_STATE)
             binding.representativeMotionLayout.post {
-                binding.representativeMotionLayout.transitionToState(savedState)
+                binding.representativeMotionLayout.transitionToState(state)
             }
+
+            val representativesScrollPosition = bundle.getInt(REPRESENTATIVE_SCROLL_POSITION, 0)
+            binding.recyclerRepresentatives.layoutManager?.scrollToPosition(
+                representativesScrollPosition
+            )
         }
     }
 
@@ -160,6 +169,12 @@ class RepresentativeFragment : Fragment() {
         super.onSaveInstanceState(outState)
         val currentState = binding.representativeMotionLayout.currentState
         outState.putInt(MOTION_LAYOUT_STATE, currentState)
+
+        val representativesScrollPosition =
+            (binding.recyclerRepresentatives.layoutManager as LinearLayoutManager)
+                .findFirstVisibleItemPosition()
+
+        outState.putInt(REPRESENTATIVE_SCROLL_POSITION, representativesScrollPosition)
     }
 
 
