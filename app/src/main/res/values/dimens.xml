@@ -5,4 +5,5 @@
 
     <dimen name="election_header_text_size">20sp</dimen>
     <dimen name="representative_text_size">18sp</dimen>
+    <dimen name="icon_size">24dp</dimen>
 </resources>
