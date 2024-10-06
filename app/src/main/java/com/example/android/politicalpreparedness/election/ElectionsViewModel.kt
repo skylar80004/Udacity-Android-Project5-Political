@@ -53,52 +53,79 @@ class ElectionsViewModel(
     private fun showLoading() {
         _showLoading.postValue(true)
     }
+
     private fun hideLoading() {
         _showLoading.postValue(false)
     }
 
-
-
-    private fun loadUpcomingElectionsDebug() {
+    fun loadUpcomingElectionsDebug() {
         // Hardcoded list of 5 election instances
         val elections = listOf(
             Election(
                 id = 1,
-                name = "Presidential Election",
+                name = "Presidential Election 2024",
                 electionDay = Date(),
                 division = Division(
                     "division_1",
                     "USA",
                     "California"
-                ) // Adjusted for your Division class definition
+                )
             ),
             Election(
                 id = 2,
-                name = "Congressional Election",
+                name = "Congressional Election 2024",
                 electionDay = Date(),
                 division = Division("division_2", "USA", "Texas")
             ),
             Election(
                 id = 3,
-                name = "Gubernatorial Election",
+                name = "Gubernatorial Election 2024",
                 electionDay = Date(),
                 division = Division("division_3", "USA", "New York")
             ),
             Election(
                 id = 4,
-                name = "Senatorial Election",
+                name = "Senatorial Election 2024",
                 electionDay = Date(),
                 division = Division("division_4", "USA", "Florida")
             ),
             Election(
                 id = 5,
-                name = "Local Election",
+                name = "Local Election 2024",
                 electionDay = Date(),
                 division = Division("division_5", "USA", "Illinois")
+            ),
+            Election(
+                id = 6,
+                name = "State Assembly Election 2024",
+                electionDay = Date(),
+                division = Division("division_6", "USA", "Nevada")
+            ),
+            Election(
+                id = 7,
+                name = "Mayoral Election 2024",
+                electionDay = Date(),
+                division = Division("division_7", "USA", "Georgia")
+            ),
+            Election(
+                id = 8,
+                name = "City Council Election 2024",
+                electionDay = Date(),
+                division = Division("division_8", "USA", "Washington")
+            ),
+            Election(
+                id = 9,
+                name = "Judicial Election 2024",
+                electionDay = Date(),
+                division = Division("division_9", "USA", "Michigan")
+            ),
+            Election(
+                id = 10,
+                name = "School Board Election 2024",
+                electionDay = Date(),
+                division = Division("division_10", "USA", "Oregon")
             )
         )
-
         _upcomingElections.value = elections
     }
-    // TODO: Create functions to navigate to saved or upcoming election voter info
 }

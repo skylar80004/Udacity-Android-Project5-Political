@@ -73,7 +73,6 @@ class ElectionsFragment : Fragment() {
             }
         }
 
-
         val viewModelFactory = ElectionsViewModelFactory(
             ElectionsNetworkRepository(CivicsApi.retrofitService),
             ElectionDatabase.getInstance(requireContext()).electionDao
@@ -96,12 +95,33 @@ class ElectionsFragment : Fragment() {
             }
         }
 
+        savedInstanceState?.let { bundle ->
+            // Retrieve saved state
+            val upcomingElectionScrollPosition = bundle.getInt(UPCOMING_ELECTIONS_SCROLL_POSITION, 0)
+            binding.recyclerUpcomingElections.layoutManager?.scrollToPosition(upcomingElectionScrollPosition)
 
-
-        // TODO: Link elections to voter info
-        // Add code to link elections to voter info if necessary
+            val savedElectionScrollPosition = bundle.getInt(SAVED_ELECTIONS_SCROLL_POSITION, 0)
+            binding.recyclerSavedElections.layoutManager?.scrollToPosition(savedElectionScrollPosition)
+        }
 
         return binding.root
+    }
+
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+
+        // Save RecyclerView scroll position for upcoming elections
+        val upcomingElectionScrollPosition =
+            (binding.recyclerUpcomingElections.layoutManager as LinearLayoutManager)
+                .findFirstVisibleItemPosition()
+
+        val savedElectionsScrollPosition =
+            (binding.recyclerUpcomingElections.layoutManager as LinearLayoutManager)
+                .findFirstVisibleItemPosition()
+
+        outState.putInt(UPCOMING_ELECTIONS_SCROLL_POSITION, upcomingElectionScrollPosition)
+        outState.putInt(SAVED_ELECTIONS_SCROLL_POSITION, savedElectionsScrollPosition)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -118,5 +138,10 @@ class ElectionsFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         // Code to refresh adapters if needed
+    }
+
+    companion object {
+        private const val UPCOMING_ELECTIONS_SCROLL_POSITION = "upcomingElectionsScrollPosition"
+        private const val SAVED_ELECTIONS_SCROLL_POSITION = "savedElectionsScrollPosition"
     }
 }
