@@ -1,43 +1,109 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="representative"
             type="com.example.android.politicalpreparedness.representative.model.Representative" />
     </data>
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:layout_height="wrap_content">
 
+        <!-- Image for Representative Photo -->
         <ImageView
             android:id="@+id/representative_photo"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:scaleType="centerCrop" />
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/ballot_logo" />
 
+        <!-- Office Name TextView -->
+        <TextView
+            android:id="@+id/office_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            style="@style/OfficeName"
+            android:layout_marginEnd="8dp"
+            android:text="@{representative.office.name}"
+            app:layout_constraintEnd_toStartOf="@id/facebook_icon"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@id/representative_photo"
+            app:layout_constraintTop_toTopOf="@id/representative_photo"
+            tools:text="Office Name" />
+
+        <!-- Official Name TextView -->
+        <TextView
+            android:id="@+id/official_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:text="@{representative.official.name}"
+            app:layout_constraintEnd_toStartOf="@id/facebook_icon"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@id/representative_photo"
+            app:layout_constraintTop_toBottomOf="@id/office_name"
+            tools:text="Official Name" />
+
+        <!-- Political Party TextView -->
+        <TextView
+            android:id="@+id/political_party"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:text="@{representative.official.party}"
+            app:layout_constraintBottom_toBottomOf="@+id/representative_photo"
+            app:layout_constraintEnd_toStartOf="@id/facebook_icon"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@id/representative_photo"
+            app:layout_constraintTop_toBottomOf="@id/official_name"
+            app:layout_constraintVertical_bias="0.0"
+            tools:text="Political Party" />
+
+        <!-- Facebook Icon -->
         <ImageView
             android:id="@+id/facebook_icon"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:scaleType="centerCrop" />
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/representative_photo"
+            tools:src="@drawable/ic_facebook" />
 
+        <!-- Twitter Icon -->
         <ImageView
             android:id="@+id/twitter_icon"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:scaleType="centerCrop" />
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/facebook_icon"
+            tools:src="@drawable/ic_twitter" />
 
+        <!-- WWW Icon -->
         <ImageView
             android:id="@+id/www_icon"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:scaleType="centerCrop" />
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/twitter_icon"
+            tools:src="@drawable/ic_www" />
 
-        <!-- You can add additional views here to display other information about the representative -->
-
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

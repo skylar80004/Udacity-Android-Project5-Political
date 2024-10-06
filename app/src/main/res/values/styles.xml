@@ -22,4 +22,9 @@
         <item name="android:autoLink">all</item>
     </style>
 
+    <style name="OfficeName">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
 </resources>

@@ -1,8 +1,18 @@
 package com.example.android.politicalpreparedness.representative
 
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
+import com.example.android.politicalpreparedness.data.RepresentativeDataSource
+import com.example.android.politicalpreparedness.data.RepresentativeNetworkRepository
+import com.example.android.politicalpreparedness.network.DataResult
+import com.example.android.politicalpreparedness.representative.model.Representative
+import com.example.android.politicalpreparedness.util.BaseViewModel
+import kotlinx.coroutines.launch
 
-class RepresentativeViewModel: ViewModel() {
+class RepresentativeViewModel(
+    private val representativeDataSource: RepresentativeDataSource
+) : BaseViewModel() {
 
     //TODO: Establish live data for representatives and address
 
@@ -23,4 +33,33 @@ class RepresentativeViewModel: ViewModel() {
 
     //TODO: Create function to get address from individual fields
 
+    private val _representatives = MutableLiveData<List<Representative>>()
+    val representatives: LiveData<List<Representative>> = _representatives
+
+    fun fetchRepresentatives() {
+        viewModelScope.launch {
+
+            val address = "340 Main St. Venice CA" // TODO fetch from location
+            val representativeResult =
+                representativeDataSource.getRepresentativesByAddress(address = address)
+
+            when (representativeResult) {
+                is DataResult.Success -> {
+                    val representativeResponse = representativeResult.data
+
+                    val representatives: List<Representative> =
+                        representativeResponse.offices.flatMap { office ->
+                            office.getRepresentatives(representativeResponse.officials)
+                        }
+                    _representatives.postValue(representatives)
+                }
+
+                is DataResult.Error -> {
+                    showErrorMessage(representativeResult.exception.message ?: "Unknown error")
+                }
+            }
+
+
+        }
+    }
 }
