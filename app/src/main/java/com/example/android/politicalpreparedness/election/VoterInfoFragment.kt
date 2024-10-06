@@ -128,7 +128,25 @@ class VoterInfoFragment : Fragment() {
             }
         }
 
-        viewModel.loadData(electionIdValue = electionId)
+        if (savedInstanceState != null) {
+            electionId = savedInstanceState.getInt(ELECTION_ID, -1)
+            division = savedInstanceState.getParcelable(DIVISION)
+
+            // Restore button state based on the saved flag
+            viewModel.loadData(electionIdValue = electionId)
+        } else {
+            viewModel.loadData(electionIdValue = electionId)
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+
+        outState.putInt(ELECTION_ID, electionId)
+        outState.putParcelable(DIVISION, division)
+
+        // You can save other necessary states like view visibility or data as well
+        outState.putBoolean(IS_FOLLOWING, viewModel.electionButtonState.value == FollowState.FOLLOWING)
     }
 
     private fun loadUrl(url: String) {
@@ -138,10 +156,10 @@ class VoterInfoFragment : Fragment() {
         startActivity(intent)
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null // Clear binding reference to avoid memory leaks
+    companion object {
+        const val ELECTION_ID = "election_id"
+        const val DIVISION = "division"
+        const val IS_FOLLOWING = "is_following"
     }
-
 
 }

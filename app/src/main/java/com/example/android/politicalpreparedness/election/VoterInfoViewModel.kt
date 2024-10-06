@@ -146,6 +146,10 @@ class VoterInfoViewModel(
                 }
             }
         }
+    }
+
+    fun setElectionButtonState(state: FollowState) {
+        electionButtonState
 
     }
 

@@ -14,7 +14,6 @@ import com.example.android.politicalpreparedness.databinding.FragmentElectionBin
 import com.example.android.politicalpreparedness.election.adapter.ElectionListAdapter
 import com.example.android.politicalpreparedness.election.adapter.ElectionListener
 import com.example.android.politicalpreparedness.network.CivicsApi
-import com.example.android.politicalpreparedness.util.showToast
 
 class ElectionsFragment : Fragment() {
     private var _binding: FragmentElectionBinding? = null
@@ -23,8 +22,6 @@ class ElectionsFragment : Fragment() {
     private val upcomingElectionsAdapter = ElectionListAdapter(
         ElectionListener(
             clickListener = { election ->
-                showToast("Upcoming Election clicked! Id: ${election.id}")
-
                 val action = ElectionsFragmentDirections.actionElectionsFragmentToVoterInfoFragment(
                     election.id,
                     election.division
@@ -37,8 +34,6 @@ class ElectionsFragment : Fragment() {
     private val savedElectionsAdapter = ElectionListAdapter(
         ElectionListener(
             clickListener = { election ->
-                showToast("Upcoming Election clicked! Id: ${election.id}")
-
                 val action = ElectionsFragmentDirections.actionElectionsFragmentToVoterInfoFragment(
                     election.id,
                     election.division
@@ -95,15 +90,6 @@ class ElectionsFragment : Fragment() {
             }
         }
 
-        savedInstanceState?.let { bundle ->
-            // Retrieve saved state
-            val upcomingElectionScrollPosition = bundle.getInt(UPCOMING_ELECTIONS_SCROLL_POSITION, 0)
-            binding.recyclerUpcomingElections.layoutManager?.scrollToPosition(upcomingElectionScrollPosition)
-
-            val savedElectionScrollPosition = bundle.getInt(SAVED_ELECTIONS_SCROLL_POSITION, 0)
-            binding.recyclerSavedElections.layoutManager?.scrollToPosition(savedElectionScrollPosition)
-        }
-
         return binding.root
     }
 
@@ -126,18 +112,21 @@ class ElectionsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        savedInstanceState?.let { bundle ->
+            val upcomingElectionScrollPosition =
+                bundle.getInt(UPCOMING_ELECTIONS_SCROLL_POSITION, 0)
+            binding.recyclerUpcomingElections.layoutManager?.scrollToPosition(
+                upcomingElectionScrollPosition
+            )
+
+            val savedElectionScrollPosition = bundle.getInt(SAVED_ELECTIONS_SCROLL_POSITION, 0)
+            binding.recyclerSavedElections.layoutManager?.scrollToPosition(
+                savedElectionScrollPosition
+            )
+        }
+
         viewModel.loadUpcomingElections()
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null // Clear binding reference to avoid memory leaks
-    }
-
-    // TODO: Refresh adapters when fragment loads
-    override fun onResume() {
-        super.onResume()
-        // Code to refresh adapters if needed
     }
 
     companion object {
