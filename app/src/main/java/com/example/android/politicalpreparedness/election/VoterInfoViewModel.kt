@@ -25,9 +25,6 @@ class VoterInfoViewModel(
         it.electionDay.toString()
     }
 
-//    private val _voterInfo = MutableLiveData<VoterInfoResponse>()
-//    val voterInfo: LiveData<VoterInfoResponse> = _voterInfo
-
     private val _correspondenceAddress = MutableLiveData<String>()
     val correspondenceAddress: LiveData<String> = _correspondenceAddress
 
@@ -62,7 +59,7 @@ class VoterInfoViewModel(
 
     private suspend fun getVoterInfo(electionId: Int) {
         val address =
-            "340 Main St. Venice CA" // TODO fetch this address from current device address, ask location permissions
+            "340 Main St. Venice CA"
         val voterInfoResult = voterInfoDataSource.getVoterInfo(
             address = address,
             electionId = electionId.toString()
@@ -70,12 +67,8 @@ class VoterInfoViewModel(
 
         when (voterInfoResult) {
             is DataResult.Success -> {
-                println("prueba, voter info result success")
-
                 val voterInfoResponse = voterInfoResult.data
-                println("prueba, election name: ${voterInfoResponse.election.name}")
 
-                // _voterInfo.postValue(voterInfoResponse) TODO
                 _election.postValue(voterInfoResponse.election)
 
                 val correspondenceAddress =
@@ -98,7 +91,6 @@ class VoterInfoViewModel(
             }
 
             is DataResult.Error -> {
-                println("prueba, voter info error: ${voterInfoResult.exception.message}")
                 showErrorMessage(message = voterInfoResult.exception.message ?: "")
             }
         }
@@ -147,20 +139,6 @@ class VoterInfoViewModel(
             }
         }
     }
-
-    fun setElectionButtonState(state: FollowState) {
-        electionButtonState
-
-    }
-
-
-//TODO: Add var and methods to save and remove elections to local database
-//TODO: cont'd -- Populate initial state of save button to reflect proper action based on election saved status
-
-    /**
-     * Hint: The saved state can be accomplished in multiple ways. It is directly related to how elections are saved/removed from the database.
-     */
-
 }
 
 enum class FollowState {

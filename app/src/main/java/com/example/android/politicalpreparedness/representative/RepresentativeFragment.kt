@@ -18,6 +18,7 @@ import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.SavedStateViewModelFactory
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.android.politicalpreparedness.R
@@ -36,17 +37,16 @@ import com.google.android.material.snackbar.Snackbar
 import java.util.Locale
 
 class RepresentativeFragment : Fragment() {
+    companion object {
+        private const val MOTION_LAYOUT_STATE = "motion_layout_state"
+    }
+
     private var _binding: FragmentRepresentativeBinding? = null
     private val binding get() = _binding!!
 
     private val representativesAdapter = RepresentativeListAdapter()
 
     private lateinit var viewModel: RepresentativeViewModel
-    private val viewModelFactory = RepresentativeViewModelFactory(
-        RepresentativeNetworkRepository(
-            CivicsApi.retrofitService
-        ),
-    )
 
     private lateinit var resolutionForResultLauncher: ActivityResultLauncher<IntentSenderRequest>
 
@@ -82,9 +82,14 @@ class RepresentativeFragment : Fragment() {
             }
         }
 
+        val viewModelFactory = RepresentativeViewModelFactory(
+            RepresentativeNetworkRepository(
+                CivicsApi.retrofitService
+            ),
+        )
+
         viewModel = ViewModelProvider(this, viewModelFactory)[RepresentativeViewModel::class.java]
         _binding = FragmentRepresentativeBinding.inflate(inflater, container, false)
-
 
         binding.representativeViewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
@@ -142,7 +147,21 @@ class RepresentativeFragment : Fragment() {
         binding.buttonLocation.setOnClickListener {
             checkLocationPermission()
         }
+
+        savedInstanceState?.let {
+            val savedState = it.getInt(MOTION_LAYOUT_STATE)
+            binding.representativeMotionLayout.post {
+                binding.representativeMotionLayout.transitionToState(savedState)
+            }
+        }
     }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        val currentState = binding.representativeMotionLayout.currentState
+        outState.putInt(MOTION_LAYOUT_STATE, currentState)
+    }
+
 
     private fun checkLocationPermission() {
         val foregroundLocationApproved = (
