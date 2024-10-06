@@ -18,13 +18,7 @@ class RepresentativeViewModel(
     companion object {
         private const val REPRESENTATIVES_KEY = "representatives"
     }
-
-    init {
-       savedStateHandle.get<List<Representative>>(REPRESENTATIVES_KEY)?.let {
-           _representatives.value = it
-       }
-    }
-
+    
     val addressLine1 = MutableLiveData<String>()
     val addressLine2 = MutableLiveData<String>()
     val city = MutableLiveData<String>()
@@ -33,6 +27,12 @@ class RepresentativeViewModel(
 
     private val _representatives = MutableLiveData<List<Representative>>()
     val representatives: LiveData<List<Representative>> = _representatives
+
+    init {
+        savedStateHandle.get<List<Representative>>(REPRESENTATIVES_KEY)?.let {
+            _representatives.value = it
+        }
+    }
 
     fun setSelectedState(value: String) {
         state.postValue(value)
